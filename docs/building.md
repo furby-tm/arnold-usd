@@ -248,7 +248,7 @@ We also support building the project with cmake to allow for greater flexibility
 - `BOOST_ROOT`: Path to the Boost Installation Root.
 - `BUILD_USE_CUSTOM_BOOST`: Set to ON if a manual override of the Boost variables is required to to a non-standard Boost installation layout.
 - `Boost_INCLUDE_DIRS`: Where to find Boost headers, optional. Use if not using a standard Boost installation layout.
-- `Boost_LIBRARIES`: Where to find Boost libraries, optional. Use if not using a standard Boost installation layout.
+- `BOOST_LIBRARIES`: Where to find Boost libraries, optional. Use if not using a standard Boost installation layout.
 - `GOOGLETEST_LOCATION`: Path to the Google Test Installation Root.
 - `GOOGLETEST_LIB_EXTENSION`: Extension of Google Test libraries.
 - `GOOGLETEST_LIB_PREFIX`: Prefix of Google Test libraries.
@@ -301,7 +301,7 @@ cmake ..
  -DBUILD_USE_CUSTOM_BOOST=ON
  -DBUILD_SCHEMAS=OFF
  -DBoost_INCLUDE_DIRS=/opt/hfs18.0/toolkit/include/hboost
- -DBoost_LIBRARIES=/opt/hfs18.0/dsolib/libhboost_python.so
+ -DBOOST_LIBRARIES=/opt/hfs18.0/dsolib/libhboost_python.so
  -DTBB_FOUND=ON
  -DTBB_INCLUDE_DIRS=/opt/hfs18.0/toolkit/include
  -DTBB_LIBRARIES=/opt/hfs18.0/dsolib/libtbb.so
@@ -330,6 +330,6 @@ cmake ..
  -DTBB_LIBRARIES="C:\Program Files\Side Effects Software\Houdini 18.0.499\custom\houdini\dsolib\tbb.lib"
  -DBUILD_USE_CUSTOM_BOOST=ON
  -DBoost_INCLUDE_DIRS="C:\Program Files\Side Effects Software\Houdini 18.0.499\toolkit\include\hboost"
- -DBoost_LIBRARIES="C:\Program Files\Side Effects Software\Houdini 18.0.499\custom\houdini\dsolib\hboost_python-mt.lib"
+ -DBOOST_LIBRARIES="C:\Program Files\Side Effects Software\Houdini 18.0.499\custom\houdini\dsolib\hboost_python-mt.lib"
  -DPython2_ROOT_DIR="C:\Program Files\Side Effects Software\Houdini 18.0.499\python27"
 ```

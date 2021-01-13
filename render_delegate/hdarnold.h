@@ -15,6 +15,8 @@
 
 #include "../arnold_usd.h"
 
+
+
 /// From 19.05.
 #if USED_USD_VERSION_GREATER_EQ(19, 5)
 /// Hydra has the new GetInstancerTransform API.

@@ -2,6 +2,8 @@ project(arnold-usd)
 
 cmake_minimum_required(VERSION 3.12)
 
+add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
+
 if (UNIX AND NOT APPLE)
     set(LINUX TRUE)
 endif ()
@@ -24,22 +26,73 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/utils" 0)
 include(options)
 
 # Global required packagse
-find_package(USD REQUIRED)
+set(LIBDIR  ${CMAKE_SOURCE_DIR}/../lib/win64_vc15)
+
+set(USD_INCLUDE_DIR  ${LIBDIR}/usd-debug/include)
+set(USD_LIBRARY_DIR  ${LIBDIR}/usd-debug/lib)
+
+set(Boost_INCLUDE_DIR ${LIBDIR}/usd-debug/include/boost-1_70)
+set(Boost_LIBRARY_DIR ${LIBDIR}/usd-debug/lib)
+
+if(CMAKE_BUILD_TYPE MATCHES "Release")
+
+else()
+#   set(USD_INCLUDE_DIR  ${LIBDIR}/usd-debug-debug/include)
+#   set(USD_LIBRARY_DIR  ${LIBDIR}/usd-debug-debug/lib)
+endif()
+
 find_package(Arnold REQUIRED)
 
 if (NOT BUILD_USE_CUSTOM_BOOST)
     if (USD_HAS_PYTHON)
-        find_package(Boost COMPONENTS python REQUIRED)
+        # find_package(Boost COMPONENTS python REQUIRED)
     else ()
-        find_package(Boost REQUIRED)
+        # find_package(Boost REQUIRED)
     endif ()
 endif ()
 if (BUILD_SCHEMAS)
     find_package(Python2 COMPONENTS Development Interpreter REQUIRED)
 else ()
-    find_package(Python2 COMPONENTS Development REQUIRED)
+    set(PYTHON_INCLUDE_DIRS ${LIBDIR}/python/37/include)
+    set(PYTHON_LIB ${LIBDIR}/python/37/libs/python37.lib)
+    set(PYTHON_EXECUTABLE ${LIBDIR}/python/37/python.exe)
 endif ()
-find_package(TBB REQUIRED)
+
+set(TBB_INCLUDE_DIRS ${LIBDIR}/usd-debug/include)
+list(APPEND TBB_LIBRARIES
+  ${LIBDIR}/usd-debug/lib/tbb.lib
+  ${LIBDIR}/usd-debug/lib/tbb_debug.lib
+  ${LIBDIR}/usd-debug/lib/tbb_preview.lib
+  ${LIBDIR}/usd-debug/lib/tbb_preview_debug.lib
+  ${LIBDIR}/usd-debug/lib/tbbmalloc.lib
+  ${LIBDIR}/usd-debug/lib/tbbmalloc_debug.lib
+  ${LIBDIR}/usd-debug/lib/tbbmalloc_proxy.lib
+  ${LIBDIR}/usd-debug/lib/tbbmalloc_proxy_debug.lib
+  ${LIBDIR}/usd-debug/lib/tbbproxy.lib
+  ${LIBDIR}/usd-debug/lib/tbbproxy_debug.lib
+)
+add_definitions(-DTBB_USE_THREADING_TOOLS)
+add_definitions(-DTBB_USE_ASSERT)
+
+include_directories(
+    ${USD_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIR}
+    ${PYTHON_INCLUDE_DIRS}
+    ${TBB_INCLUDE_DIRS}
+)
+
+link_directories(
+    ${USD_LIBRARY_DIR}
+    ${Boost_LIBRARY_DIR}
+    ${LIBDIR}/python/37/libs
+)
+
+set(USD_VERSION  "0.20.11")
+set(USD_MAJOR_VERSION 20)
+set(USD_MINOR_VERSION 11)
+set(USD_PATCH_VERSION 1)
+set(USD_HAS_FULLSCREEN_SHADER ON)
+
 
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/arnold_usd.h.in"
